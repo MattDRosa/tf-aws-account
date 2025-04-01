@@ -1,5 +1,5 @@
 module "vpc" {
-  source = "./infra/vpc"
+  source = "./vpc"
 
   vpc_name             = var.vpc_name
   vpc_cidr             = var.vpc_cidr
@@ -7,11 +7,15 @@ module "vpc" {
   private_subnet_cidrs = var.private_subnet_cidrs
 }
 
+module "iam" {
+  source = "./iam"
+}
+
 module "eks" {
-  source = "./infra/eks"
+  source = "./eks"
 
-  eks_cluster_name    = var.cluster_name
+  eks_cluster_name    = var.eks_cluster_name
   eks_cluster_version = var.eks_cluster_version
-  vpc_id              = module.vpc.vpc_id
-
+  eks_master_role_arn = module.iam.eks_master_role_arn
+  private_subnet_ids  = module.vpc.private_subnet_ids
 }
