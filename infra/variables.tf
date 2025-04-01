@@ -17,13 +17,13 @@ variable "vpc_cidr" {
 variable "private_subnet_cidrs" {
   description = "CIDR blocks and AZs for private subnets"
   type        = map(string)
-  default = {}
+  default     = {}
 }
 
 variable "public_subnet_cidrs" {
   description = "CIDR blocks and AZs for public subnets"
   type        = map(string)
-  default = {}
+  default     = {}
 }
 
 variable "eks_cluster_name" {

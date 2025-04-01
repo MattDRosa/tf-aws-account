@@ -3,17 +3,17 @@ output "vpc_id" {
 }
 
 output "public_subnets_cidrs" {
-  value = aws_subnet.public_subnets[*].cidr_block
+  value = values(aws_subnet.public_subnets)[*].cidr_block
 }
 
 output "private_subnets_cidrs" {
-  value = aws_subnet.private_subnets[*].cidr_block
+  value = values(aws_subnet.private_subnets)[*].cidr_block
 }
 
 output "public_subnets_ids" {
-  value = aws_subnet.public_subnets[*].id
+  value = values(aws_subnet.public_subnets)[*].id
 }
 
 output "private_subnets_ids" {
-  value = aws_subnet.private_subnets[*].id
+  value = values(aws_subnet.private_subnets)[*].id
 }

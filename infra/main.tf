@@ -16,6 +16,6 @@ module "eks" {
 
   eks_cluster_name    = var.eks_cluster_name
   eks_cluster_version = var.eks_cluster_version
-  eks_master_role_arn = module.iam.eks_master_role_arn
-  private_subnet_ids  = module.vpc.private_subnet_ids
+  eks_master_role_arn = module.iam.eks_cluster_role_arn
+  private_subnet_ids  = module.vpc.private_subnets_ids
 }
