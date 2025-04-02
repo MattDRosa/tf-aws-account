@@ -14,8 +14,17 @@ module "iam" {
 module "eks" {
   source = "./eks"
 
-  eks_cluster_name    = var.eks_cluster_name
-  eks_cluster_version = var.eks_cluster_version
-  eks_master_role_arn = module.iam.eks_cluster_role_arn
-  private_subnet_ids  = module.vpc.private_subnets_ids
+  eks_cluster_name     = var.eks_cluster_name
+  eks_cluster_version  = var.eks_cluster_version
+  eks_master_role_arn  = module.iam.eks_cluster_role_arn
+  eks_master_role_name = module.iam.eks_master_role_name
+  private_subnet_ids   = module.vpc.private_subnets_ids
 }
+
+# module "db" {
+#   source = "./db"
+
+#   table_name = var.table_name
+#   attributes = var.attributes
+#   billing_mode = var.billing_mode
+# }

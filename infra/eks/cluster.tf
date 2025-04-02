@@ -13,3 +13,8 @@ resource "aws_eks_cluster" "dev_cluster" {
   }
 
 }
+
+resource "aws_iam_role_policy_attachment" "cluster_role_attachment" {
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  role       = var.eks_master_role_name
+}

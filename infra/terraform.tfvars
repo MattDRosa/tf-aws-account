@@ -13,3 +13,20 @@ public_subnet_cidrs = {
 region   = "us-east-1"
 vpc_cidr = "10.0.0.0/16"
 vpc_name = "dev-vpc"
+table_name = "dogs"
+attributes = [
+  {
+    name = "id"
+    type = "S"
+  },
+  {
+    name = "nome"
+    type = "S"
+  }
+]
+lsi_attributes =[
+  {
+    name = "data_resgate"
+    type = "S"
+  }
+]

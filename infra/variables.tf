@@ -36,3 +36,35 @@ variable "eks_cluster_version" {
   type        = string
 }
 
+variable "table_name" {
+  description = "DynamoDB table name"
+  type        = string
+}
+
+variable "attributes" {
+  description = "DynamoDB table attributes"
+  type = list(map(string))
+  default = [
+    {
+      name = "id"
+      type = "S"
+    }
+  ]
+}
+
+variable "lsi_attributes" {
+  description = "DynamoDB table LSI attributes"
+  type = list(map(string))
+  default = [
+    {
+      name = "id"
+      type = "S"
+    }
+  ]
+}
+
+variable "billing_mode" {
+  description = "DynamoDB table billing mode"
+  type        = string
+  default     = "PAY_PER_REQUEST"
+}
