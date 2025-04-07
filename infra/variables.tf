@@ -4,6 +4,11 @@ variable "region" {
   type        = string
 }
 
+variable "profile" {
+  description = "AWS CLI profile"
+  type        = string
+  default     = "default"
+}
 variable "vpc_name" {
   description = "Name of VPC"
   type        = string
@@ -36,6 +41,12 @@ variable "eks_cluster_version" {
   type        = string
 }
 
+variable "base_instance_type" {
+  description = "EC2 instance type for worker nodes"
+  type        = string
+  default     = "t3a.small"
+}
+
 variable "table_name" {
   description = "DynamoDB table name"
   type        = string
@@ -43,7 +54,7 @@ variable "table_name" {
 
 variable "attributes" {
   description = "DynamoDB table attributes"
-  type = list(map(string))
+  type        = list(map(string))
   default = [
     {
       name = "id"
@@ -54,7 +65,7 @@ variable "attributes" {
 
 variable "lsi_attributes" {
   description = "DynamoDB table LSI attributes"
-  type = list(map(string))
+  type        = list(map(string))
   default = [
     {
       name = "id"

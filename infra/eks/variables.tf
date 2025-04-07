@@ -1,5 +1,9 @@
 variable "eks_cluster_name" {}
 variable "eks_cluster_version" {}
+variable "eks_node_role" {}
 variable "eks_master_role_arn" {}
 variable "eks_master_role_name" {}
-variable "private_subnet_ids" {}
+variable "base_instance_type" {}
+variable "subnet_ids" {}
+variable "vpc_id" {}
+variable "vpc_cidr" {}
