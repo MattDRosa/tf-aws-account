@@ -10,6 +10,6 @@ resource "aws_key_pair" "node_ssh_key" {
 
 resource "local_file" "private_key" {
   content         = tls_private_key.ssh_key.private_key_pem
-  filename        = "ec2-ssh-key.pem"
+  filename        = "./ssh/ec2-ssh-key.pem"
   file_permission = "0400"
 }
