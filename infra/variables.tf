@@ -14,6 +14,11 @@ variable "vpc_cidr" {
   type        = string
 }
 
+variable "internet_gateway_name" {
+  description = "Name of the Internet Gateway"
+  type        = string
+}
+
 variable "private_subnet_cidrs" {
   description = "CIDR blocks and AZs for private subnets"
   type        = map(string)
@@ -25,14 +30,3 @@ variable "public_subnet_cidrs" {
   type        = map(string)
   default = {}
 }
-
-variable "eks_cluster_name" {
-  description = "Name of the EKS cluster"
-  type        = string
-}
-
-variable "eks_cluster_version" {
-  description = "Version of the EKS cluster"
-  type        = string
-}
-
