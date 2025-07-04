@@ -9,3 +9,8 @@ resource "aws_subnet" "private_subnets" {
     Name = "Private Subnet (${each.key})"
   }
 }
+
+resource "aws_route_table_association" "private" {
+  subnet_id      = aws_subnet.private_subnets.id
+  route_table_id = aws_route_table.private.id
+}

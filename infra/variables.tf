@@ -1,4 +1,4 @@
-variable "region" {
+variable "aws_region" {
   description = "Region to create AWS resources"
   default     = "us-east-1"
   type        = string
@@ -22,11 +22,11 @@ variable "internet_gateway_name" {
 variable "private_subnet_cidrs" {
   description = "CIDR blocks and AZs for private subnets"
   type        = map(string)
-  default = {}
+  default     = {}
 }
 
 variable "public_subnet_cidrs" {
   description = "CIDR blocks and AZs for public subnets"
   type        = map(string)
-  default = {}
+  default     = {}
 }
