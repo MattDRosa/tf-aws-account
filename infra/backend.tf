@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket       = var.bucket_name
+    bucket       = "matt-dev-tf"
     key          = "terraform.tfstate"
     encrypt      = true
     use_lockfile = true

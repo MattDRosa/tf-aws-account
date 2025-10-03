@@ -11,4 +11,3 @@ public_subnet_cidrs = {
 vpc_cidr              = "10.0.0.0/16"
 vpc_name              = "dev-vpc"
 internet_gateway_name = "dev-igw"
-bucket_name           = "matt-dev-tf"
