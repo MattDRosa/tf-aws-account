@@ -1,0 +1,99 @@
+name: 'Terraform'
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  dev:
+    name: 'Terraform dev'
+    runs-on: ubuntu-latest
+    environment: dev
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Init
+        if: github.event.pull_request.base.ref == 'main'
+        run: terraform init -backend-config="region=us-west-1"
+
+      - name: Terraform Plan (dev)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-west-1
+        run: terraform plan -input=false -var-file=infra/env/dev/terraform.tfvars
+
+      # Apply para dev (us-west-1)
+      - name: Terraform Apply (dev)
+        if: github.event.pull_request.base.ref == 'dev'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-west-1
+        run: terraform apply -auto-approve -input=false -var-file=infra/env/dev/terraform.tfvars
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'Merge from dev branch'
+          title: 'PR: Merge from dev branch'
+          body: 'PR criado automaticamente.'
+          base: main
+          branch: auto/pr-branch
+
+  main:
+    name: 'Terraform Prod'
+    runs-on: ubuntu-latest
+    environment: prod
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+        with:
+          cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
+
+      - name: Terraform Format
+        run: terraform fmt -check
+
+      - name: Terraform Validate
+        run: terraform validate
+
+      - name: Terraform Init
+        if: github.event.pull_request.base.ref == 'main'
+        run: terraform init -backend-config="region=us-east-1"
+
+      - name: Terraform Plan (prod)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+        run: terraform plan -input=false -var-file=infra/env/prod/terraform.tfvars
+
+      # Apply para prod (us-east-1)
+      - name: Terraform Apply (prod)
+        if: github.event.pull_request.base.ref == 'prod'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+        run: terraform apply -auto-approve -input=false -var-file=infra/env/prod/terraform.tfvars
