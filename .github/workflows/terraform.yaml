@@ -38,7 +38,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-west-1
-        run: terraform plan infra -input=false -var-file=infra/env/dev/terraform.tfvars
+        run: terraform plan -chdir=infra -input=false -var-file=infra/env/dev/terraform.tfvars
 
       # Apply para dev (us-west-1)
       - name: Terraform Apply (dev)
@@ -47,7 +47,7 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-west-1
-        run: terraform apply infra -auto-approve -input=false -var-file=infra/env/dev/terraform.tfvars
+        run: terraform apply -chdir=infra -auto-approve -input=false -var-file=infra/env/dev/terraform.tfvars
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v5
