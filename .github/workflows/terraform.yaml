@@ -69,7 +69,7 @@ jobs:
           title: 'PR: Merge from dev branch'
           body: 'PR criado automaticamente.'
           base: main
-          branch: auto/pr-branch
+          branch: dev
 
   main:
     name: 'Terraform Prod'
