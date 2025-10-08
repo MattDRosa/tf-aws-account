@@ -69,11 +69,11 @@ jobs:
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'Merge from dev branch'
-          title: 'PR: Merge from dev branch'
+          commit-message: 'Terraform changes from dev'
+          title: 'PR: Terraform changes from dev'
           body: 'PR criado automaticamente.'
           base: main
-          branch: dev
+          branch: terraform-changes-${{ github.run_number }}
 
   main:
     name: 'Terraform Prod'
