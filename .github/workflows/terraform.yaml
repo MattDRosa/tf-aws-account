@@ -54,7 +54,6 @@ jobs:
 
       # Apply para dev (us-west-1)
       - name: Terraform Apply (dev)
-        if: github.event.pull_request.base.ref == 'dev'
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
