@@ -66,14 +66,9 @@ jobs:
         working-directory: infra
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: 'Merge from dev branch'
-          title: 'PR: Merge from dev branch'
-          body: 'PR criado automaticamente.'
-          base: main
-          branch: dev
+        run: gh pr create -B main -H dev --title 'Merge dev into main' --body 'PR created by Github actions'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   main:
     name: 'Terraform Prod'
