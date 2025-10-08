@@ -30,8 +30,3 @@ variable "public_subnet_cidrs" {
   type        = map(string)
   default     = {}
 }
-
-variable "bucket_name" {
-  description = "Name of the S3 bucket"
-  type        = string
-}
