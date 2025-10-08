@@ -1,0 +1,120 @@
+name: 'Terraform'
+
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  dev:
+    name: 'Terraform dev'
+    runs-on: ubuntu-latest
+    environment: dev
+    if: github.ref == 'refs/heads/dev' || github.event.pull_request.head.ref == 'dev'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Format
+        run: terraform fmt -check
+        working-directory: infra
+
+      - name: Terraform Init
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+        run: terraform init
+        working-directory: infra
+
+      - name: Terraform Validate
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+        run: terraform validate
+        working-directory: infra
+
+      - name: Terraform Plan (dev)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-west-1
+        run: terraform plan -input=false -var-file=env/dev/terraform.tfvars
+        working-directory: infra
+
+      # Apply para dev (us-west-1)
+      - name: Terraform Apply (dev)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-west-1
+        run: terraform apply -auto-approve -input=false -var-file=env/dev/terraform.tfvars
+        working-directory: infra
+
+      - name: Create Pull Request
+        run: gh pr create -B main -H dev --title 'Merge dev into main' --body 'PR created by Github actions'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  main:
+    name: 'Terraform Prod'
+    runs-on: ubuntu-latest
+    environment: prod
+    if: github.ref == 'refs/heads/main' || github.event.pull_request.base.ref == 'main'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1
+
+      - name: Terraform Format
+        run: terraform fmt -check
+        working-directory: infra
+
+      - name: Terraform Validate
+        run: terraform validate
+        working-directory: infra
+
+      - name: Terraform Init
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-west-1
+        run: terraform init -backend-config="region=us-east-1"
+        working-directory: infra
+
+      - name: Terraform Plan (prod)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+        run: terraform plan -input=false -var-file=env/prod/terraform.tfvars
+        working-directory: infra
+
+      # Apply para prod (us-east-1)
+      - name: Terraform Apply (prod)
+        if: github.event.pull_request.base.ref == 'prod'
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: us-east-1
+        run: terraform apply -auto-approve -input=false -var-file=env/prod/terraform.tfvars
+        working-directory: infra
