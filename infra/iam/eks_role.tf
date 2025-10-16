@@ -20,7 +20,6 @@ resource "aws_iam_role" "eks_cluster_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "cluster_AmazonEKSClusterPolicy" {
-  count      = var.create_eks_cluster ? 1 : 0
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
-  role       = aws_iam_role.eks_cluster_role.name
+  role       = aws_iam_role.eks_cluster_role[0].name
 }
