@@ -7,15 +7,6 @@
 #   private_subnets = var.private_subnet_cidrs
 # }
 
-# module "iam" {
-#   source = "./iam"
-
-#   create_eks_cluster = var.create_eks_cluster
-
-#   eks_master_role_name = var.eks_master_role_name
-#   eks_nodes_role_name  = var.eks_nodes_role_name
-# }
-
 # module "eks" {
 #   count  = var.create_eks_cluster ? 1 : 0
 #   source = "./eks"
@@ -27,8 +18,7 @@
 #   eks_cluster_name     = var.eks_cluster_name
 #   eks_cluster_version  = var.eks_cluster_version
 #   eks_master_role_name = var.eks_master_role_name
-#   eks_master_role_arn  = module.iam.eks_master_role_arn
-#   eks_nodes_role_arn   = module.iam.eks_base_nodes_role_arn
+#   eks_nodes_role_name  = var.eks_nodes_role_name
 
 #   base_instance_type   = var.base_instance_type
 #   eks_nodes_ami_type   = var.eks_nodes_ami_type

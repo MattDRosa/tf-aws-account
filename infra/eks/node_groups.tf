@@ -1,7 +1,7 @@
 resource "aws_eks_node_group" "base_nodes" {
   cluster_name    = var.eks_cluster_name
   node_group_name = var.base_node_group_name
-  node_role_arn   = var.eks_nodes_role_arn
+  node_role_arn   = aws_iam_role.eks_nodes_role.arn
   subnet_ids      = var.subnet_ids
   capacity_type   = "ON_DEMAND"
   ami_type        = var.eks_nodes_ami_type

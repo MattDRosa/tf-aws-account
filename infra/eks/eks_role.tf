@@ -1,6 +1,4 @@
 resource "aws_iam_role" "eks_cluster_role" {
-  count = var.create_eks_cluster ? 1 : 0
-
   name = var.eks_master_role_name
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
