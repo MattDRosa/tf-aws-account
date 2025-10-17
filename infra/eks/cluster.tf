@@ -1,6 +1,6 @@
 resource "aws_eks_cluster" "dev_cluster" {
   name                          = var.eks_cluster_name
-  role_arn                      = var.eks_master_role_arn
+  role_arn                      = aws_iam_role.eks_cluster_role.arn
   version                       = var.eks_cluster_version
   enabled_cluster_log_types     = ["api", "audit", "scheduler", "controllerManager"]
   bootstrap_self_managed_addons = true

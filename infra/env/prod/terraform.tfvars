@@ -13,7 +13,7 @@ vpc_name              = "prod-vpc"
 internet_gateway_name = "prod-igw"
 aws_region            = "us-east-1"
 
-create_eks_cluster    = true
+create_eks_cluster    = false
 eks_cluster_name      = "prod-eks-cluster"
 eks_cluster_version   = "1.33"
 base_node_group_name  = "prod-eks-node-group"

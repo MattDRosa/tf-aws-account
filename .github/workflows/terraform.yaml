@@ -49,21 +49,12 @@ jobs:
         run: terraform validate
         working-directory: infra
 
-      - name: Terraform Plan (dev)
+      - name: Terraform Plan
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-west-1
-        run: terraform plan -input=false -var-file=env/dev/terraform.tfvars
-        working-directory: infra
-
-      # Apply para dev (us-west-1)
-      - name: Terraform Apply (dev)
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-west-1
-        run: terraform apply -auto-approve -input=false -var-file=env/dev/terraform.tfvars
+          AWS_DEFAULT_REGION: us-east-1
+        run: terraform plan -input=false -var-file=env/prod/terraform.tfvars
         working-directory: infra
 
       - name: Create Pull Request
@@ -122,7 +113,6 @@ jobs:
         run: terraform plan -input=false -var-file=env/prod/terraform.tfvars
         working-directory: infra
 
-      # Apply para prod (us-east-1)
       - name: Terraform Apply (prod)
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
